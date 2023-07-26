@@ -118,16 +118,3 @@ export class SendbirdApiAdapter {
     return users.map((u) => this.upsertUser(u));
   };
 }
-
-(() => {
-  const sb = new SendbirdApiAdapter();
-  const db = new UserServiceDb();
-  const program = pipe(
-    db.getUsersFromDb,
-    Effect.flatMap(Effect.forEach((u) => sb.upsertUser(u)))
-  );
-
-  Effect.runPromise(program)
-    .then(() => console.log("program ran"))
-    .catch((e) => console.log(e));
-})();
