@@ -58,10 +58,6 @@ export class SendbirdApiAdapter {
     });
   };
 
-  createSendbirdUsers(users: Array<SendbirdCreateUserRequiredArgs>) {
-    return users.map((u) => this.createSendbirdUser(u));
-  }
-
   private updateSendbirdUser = (data: SendbirdUpdateUserRequiredArgs) =>
     Effect.tryPromise({
       try: async () => {
@@ -109,11 +105,5 @@ export class SendbirdApiAdapter {
         },
       })
     );
-  };
-
-  upsertUsers = (users: Array<SendbirdCreateUserRequiredArgs>) => {
-    console.log("users");
-    console.log(users);
-    return users.map((u) => this.upsertUser(u));
   };
 }
