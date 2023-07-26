@@ -10,7 +10,7 @@ export class UserServiceDatabase {
   public readonly getUsersFromDb = Effect.tryPromise({
     try: async () => {
       const result = await this.sql`
-        SELECT u.id, n.first_name, n.last_name, ms."name" FROM users as u
+        SELECT u.id, u.contact_sfid, n.first_name, n.last_name, ms."name" FROM users as u
         JOIN user_names as n on u.id = n.user_id
         JOIN user_memberships as um on u.id = um.user_id
         JOIN membership_statuses as ms on um.membership_status_id = ms.id
@@ -21,6 +21,7 @@ export class UserServiceDatabase {
         user_id: r.id,
         nickname: r.first_name + r.last_name,
         profile_url: "",
+        contact_sfid: r.contact_sfid,
       }));
     },
     catch: (e: unknown) => {
