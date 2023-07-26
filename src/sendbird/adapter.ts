@@ -2,7 +2,6 @@ import axios from "axios";
 import { Effect, Option, pipe } from "effect";
 
 import { env } from "../env";
-import { UserServiceDb } from "../user-service/adapter";
 import {
   SendbirdCreateUserRequiredArgs,
   SendbirdUpdateUserRequiredArgs,

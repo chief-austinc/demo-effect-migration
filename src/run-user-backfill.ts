@@ -1,10 +1,12 @@
+require("dotenv").config();
+
 import { Effect, pipe } from "effect";
 import { SendbirdApiAdapter } from "./sendbird/adapter";
-import { UserServiceDb } from "./user-service/adapter";
+import { UserServiceDatabase } from "./user-service/adapter";
 
 (() => {
   const sb = new SendbirdApiAdapter();
-  const db = new UserServiceDb();
+  const db = new UserServiceDatabase();
   const program = pipe(
     db.getUsersFromDb,
     Effect.flatMap(Effect.forEach((u) => sb.upsertUser(u)))
