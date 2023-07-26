@@ -1,0 +1,18 @@
+stages: 
+  - initialize
+  - security
+  - terraform:plan
+  - terraform:apply
+
+init:
+  stage: initialize
+  script:
+    - pnpm install
+
+include:
+  - project: "chief-tech/gitlab-templates"
+    ref: main
+    file:
+      - ".gitlab-ci-template.yml"
+      - "terraform/terraform.gitlab-ci-template.yml"
+      - "security/security.gitlab-ci-template.yml"
