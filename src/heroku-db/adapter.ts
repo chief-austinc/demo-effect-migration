@@ -7,20 +7,23 @@ export class HerokuDatabaseAdapter {
     ssl: { rejectUnauthorized: false },
   });
 
-  getAvatarForUsersByContactSfids(contactSfids: string[]) {
+  private readonly queryByContactSfids = (contactSfids: string[]) => this.sql`
+    SELECT p.avatar, p.sfid FROM profiles as p
+    WHERE p.sfid IN ${this.sql(contactSfids)}
+  `;
+
+  public getAvatarForUsersByContactSfids(contactSfids: string[]) {
     return Effect.tryPromise({
-      try: async () => {
-        const results = await this.sql`
-          SELECT p.avatar, p.sfid FROM profiles as p
-          WHERE p.sfid IN (${contactSfids.join(",")})
-        `;
-        const contactSfidToAvatarMap = results.map((r) => ({
-          contactSfid: r.sfid,
-          avatar: r.avatar?.url,
-        }));
-        return contactSfidToAvatarMap;
+      try: () =>
+        this.queryByContactSfids(contactSfids).then((results) =>
+          results.map((r) => ({
+            contactSfid: r.sfid,
+            avatar: r.avatar?.url,
+          }))
+        ),
+      catch: (e) => {
+        console.log(e);
       },
-      catch: () => {},
     });
   }
 }
